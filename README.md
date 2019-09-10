@@ -1,4 +1,4 @@
-# udacity-restaurant-reviews
+# Restaurant Reviews App
 This restaurant reviews app was created as part of the Udacity Front-End Web Developer Nanodegree.
 
 # Preview
