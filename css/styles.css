@@ -81,11 +81,10 @@ nav h1 a {
 }
 
 @media only screen and (min-width: 500px) {
-  nav h1 a  {
+  nav h1 a {
     letter-spacing: 10px;
   }
 }
- 
 
 #breadcrumb {
   padding: 10px 20px 16px;
@@ -93,7 +92,6 @@ nav h1 a {
   background-color: #eee;
   font-size: 17px;
   margin: 0;
-  width: calc(50% - 80px);
 }
 
 /* Display list items side by side */
@@ -160,6 +158,18 @@ nav h1 a {
 
 /* ====================== Restaurant Listing ====================== */
 
+.detailpage {
+  top: 80px;
+  display: grid;
+  grid-template-areas: "restaurant" "map" "reviews";
+}
+
+@media only screen and (min-width: 800px) {
+  .detailpage {
+    grid-template-areas: "restaurant reviews" "map map";
+  }
+}
+
 #restaurants-list {
   background-color: #f3f3f3;
   list-style: outside none none;
@@ -168,9 +178,8 @@ nav h1 a {
   text-align: center;
   display: grid;
   gap: 20px;
-  grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(300px, 1fr));
 }
-
 
 #restaurants-list li {
   background-color: #fff;
@@ -221,7 +230,6 @@ nav h1 a {
 /* ====================== Restaurant Details ====================== */
 
 .inside header {
-  position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
@@ -229,21 +237,15 @@ nav h1 a {
 
 .inside #map-container {
   background: blue none repeat scroll 0 0;
-  height: 100%;
-  position: fixed;
-  right: 0;
-  top: 80px;
-  width: 50%;
+  width: 100%;
+  grid-area: map;
+  height: 300px;
 }
 
 .inside #map {
   background-color: #ccc;
   height: 100%;
   width: 100%;
-}
-
-.inside #footer {
-  width: 50%;
 }
 
 #restaurant-name {
@@ -258,7 +260,6 @@ nav h1 a {
 }
 
 #restaurant-img {
-
   width: 100%;
 }
 
@@ -281,14 +282,12 @@ nav h1 a {
 
 #restaurant-container {
   border-bottom: 1px solid #d9d9d9;
-  border-top: 1px solid #fff;
-  padding-top: 140px;
-  width: 50%;
+  grid-area: restaurant;
 }
 
 #reviews-container {
-  padding-top: 40px;
-  width: 50%;
+  padding-top: 10px;
+  grid-area: reviews;
 }
 
 #reviews-container h2 {
@@ -326,4 +325,3 @@ nav h1 a {
   margin-left: 20px;
   margin-bottom: 20px;
 }
-
