@@ -1,6 +1,6 @@
-console.log("Service Worker: Registred")
+var VERSION = 'v1'
 
-const cachedFiles = [
+var cacheFirstFiles = [
     '/',
     '/index.html',
     '/restaurant.html',
@@ -19,38 +19,65 @@ const cachedFiles = [
     '/img/8.jpg',
     '/img/9.jpg',
     '/img/10.jpg'
+
 ]
 
-self.addEventListener('install', function (event) {
+var networkFirstFiles = []
+
+// Below is the service worker code.
+
+var cacheFiles = cacheFirstFiles.concat(networkFirstFiles)
+
+self.addEventListener('install', event => {
     event.waitUntil(
-        caches.open('v1').then(function (cache) {
-            return cache.addAll(cachedFiles)
+        caches.open(VERSION).then(cache => {
+            return cache.addAll(cacheFiles)
         })
-    )
+    );
+});
+
+self.addEventListener('fetch', event => {
+    if (event.request.method !== 'GET') { return; }
+    if (networkFirstFiles.indexOf(event.request.url) !== -1) {
+        event.respondWith(networkElseCache(event))
+    } else if (cacheFirstFiles.indexOf(event.request.url) !== -1) {
+        event.respondWith(cacheElseNetwork(event))
+    }
+    event.respondWith(fetch(event.request))
 })
 
-
-self.addEventListener('fetch', function (event) {
-    event.respondWith(
-        caches.match(e.request).then(function (response) {
-            if (response) {
-                console.log(`Found ${event.request} in cache`)
+// If cache else network.
+// For images and assets that are not critical to be fully up-to-date.
+// developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/
+// #cache-falling-back-to-network
+function cacheElseNetwork(event) {
+    return caches.match(event.request).then(response => {
+        function fetchAndCache() {
+            return fetch(event.request).then(response => {
+                // Update cache.
+                caches.open(VERSION).then(cache => cache.put(event.request, response.clone()))
                 return response
-            }
-            else {
-                console.log(`Could not find ${event.request} in cache`)
-                return fetch(e.request)
-                    .then(function (response) {
-                        cache.open('v1').then(function (cache) {
-                            cache.put(e.request, response)
-                        })
-                        return response
-                    })
-                    .catch(function (error) {
-                        console.error(error)
-                    })
+            })
+        }
 
-            }
-        })
-    )
-})
+        // If not exist in cache, fetch.
+        if (!response) { return fetchAndCache() }
+
+        // If exists in cache, return from cache while updating cache in background.
+        fetchAndCache();
+        return response;
+    });
+}
+
+// If network else cache.
+// For assets we prefer to be up-to-date (i.e., JavaScript file).
+function networkElseCache(event) {
+    return caches.match(event.request).then(match => {
+        if (!match) { return fetch(event.request) }
+        return fetch(event.request).then(response => {
+            // Update cache.
+            caches.open(VERSION).then(cache => cache.put(event.request, response.clone()))
+            return response
+        }) || response
+    })
+}
