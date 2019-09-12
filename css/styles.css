@@ -164,7 +164,7 @@ nav h1 a {
   grid-template-areas: "restaurant" "map" "reviews";
 }
 
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 1000px) {
   .detailpage {
     grid-template-areas: "restaurant reviews" "map map";
   }
