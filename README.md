@@ -4,4 +4,4 @@ This restaurant reviews app was created as part of the Udacity Front-End Web Dev
 ## Preview
 For preview Netlify is used since GitHub Pages does not allow direct access to the data json file:
 
-https://focused-poitras-050a45.netlify.com
+http://udacity-restaurant-reviews.netlify.com
