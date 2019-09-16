@@ -300,7 +300,7 @@ header h1 a {
   grid-area: reviews;
 }
 
-#reviews-container h2 {
+#reviews-container h3 {
   color: var(--orange);
   font-size: 24pt;
   font-weight: 300;
